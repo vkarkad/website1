@@ -71,7 +71,7 @@ pipeline {
           steps{
              script {
                 echo "${env.STAGE}"
-               IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
+               IMAGE_TAG = "vkarkad/${BUILD_JOB}:${IMAGE_VER}"
                dockerImage = docker.build "${IMAGE_TAG}"
              }
           }
