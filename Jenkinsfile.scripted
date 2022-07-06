@@ -81,8 +81,9 @@ pipeline {
         script {
           echo "${env.STAGE}"
           withDockerRegistry(credentialsId: '18307b93-3074-471e-a5e0-ce482bca9419') {
-            IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
-            dockerImage.push("${IMAGE_TAG}")
+            //IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
+            //dockerImage.push("${IMAGE_TAG}")
+            sh "docker push vkarkad/${BUILD_JOB}"
           } 
           //dockerImage.push('latest')
 
