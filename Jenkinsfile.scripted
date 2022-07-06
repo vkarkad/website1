@@ -67,6 +67,7 @@ pipeline {
          stage('Building image') {
           steps{
              script {
+                echo "${env.STAGE}"
                IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
                dockerImage = docker.build "${IMAGE_TAG}"
              }
@@ -75,6 +76,7 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
+                echo "${env.STAGE}"
           docker.withRegistry( '', DOCKERHUB_CREDS) {
             dockerImage.push("${IMAGE_TAG}")
             //dockerImage.push('latest')
