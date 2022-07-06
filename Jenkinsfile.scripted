@@ -6,25 +6,25 @@ pipeline {
     }
 
 	environment {
-		DOCKERHUB_CREDS =credentials('18307b93-3074-471e-a5e0-ce482bca9419') 
-		BUILD_JOB = env.JOB_BASE_NAME
-		BUILD_NUM = env.BUILD_NUMBER
-		BUILD_DIR = '/opt/jenkins/workspace'
-		PUBLIC_IP = ''
+		DOCKERHUB_CREDS = credentials('18307b93-3074-471e-a5e0-ce482bca9419') 
+		BUILD_JOB = "${env.JOB_BASE_NAME}"
+		BUILD_NUM = "${env.BUILD_NUMBER}"
+		BUILD_DIR = "/opt/jenkins/workspace"
+		PUBLIC_IP = ""
 		CNTR_PORT = 80
 		HOST_PORT = 80
-		IMAGE_NAME = 'web'
-		MAJOR_VER = '1'
-		IMAGE_VER = MAJOR_VER + '.' + env.BUILD_NUMBER
+		IMAGE_NAME = "web"
+		MAJOR_VER = "1"
+		IMAGE_VER = "${MAJOR_VER}" + "." + "${env.BUILD_NUMBER}"
 	}
 
 	stages {
         stage('Pre-Build') {
             steps {
                 sh "printenv"
-                ip_cmd = "curl ifconfig.co | tail -1"
-      	        PUBLIC_IP = sh (script: ip_cmd, returnStdout: true).trim()
-      	        echo "PUBLIC_IP: <<${PUBLIC_IP}>>"
+                //ip_cmd = "curl ifconfig.co | tail -1"
+      	        //PUBLIC_IP = sh (script: ip_cmd, returnStdout: true).trim()
+      	        //echo "PUBLIC_IP: <<${PUBLIC_IP}>>"
       	        echo "HOST_PORT: <<${HOST_PORT}>>"
       	        echo "CNTR_PORT: <<${CNTR_PORT}>>"
       	        echo "IMAGE_VER: <<${IMAGE_VER}>>"
@@ -43,31 +43,33 @@ pipeline {
 
         stage('Docker-Build') {
             steps {
-                return // FIXME
+                //return // FIXME
+                echo "${env.STAGE}"
 
     	        // Build the website image
-                sh "cd ${BUILD_DIR}/${BUILD_JOB};pwd;ls -l;cat -n Dockerfile"
-                IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
-                sh "sudo docker build --tag ${IMAGE_TAG} ."
-                sh "sudo docker run -dit --name ${IMAGE_TAG} -p ${HOST_PORT}:${CNTR_PORT} ${IMAGE_TAG}"
+                //sh "cd ${BUILD_DIR}/${BUILD_JOB};pwd;ls -l;cat -n Dockerfile"
+                //IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
+                //sh "sudo docker build --tag ${IMAGE_TAG} ."
+                //sh "sudo docker run -dit --name ${IMAGE_TAG} -p ${HOST_PORT}:${CNTR_PORT} ${IMAGE_TAG}"
 
                 // Publish the website image
-                sh "sudo echo ${GITHUB_PASSWD} | sudo docker login -u ${GITHUB_USERID} --password-stdin"
+                //sh "sudo echo ${GITHUB_PASSWD} | sudo docker login -u ${GITHUB_USERID} --password-stdin"
     	    }
         }
 
 	    stage('Nginx-Deploy') {	
             steps {
-			    return // FIXME
+			    echo "${env.STAGE}"
 
-      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f deploy.yml"
-      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f svc.yml"
+      	        //sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f deploy.yml"
+      	        //sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f svc.yml"
 		    }
         }
 
         stage('Publish-Website') {
             steps {
-				echo "Website URL: http://${PUBLIC_IP}:${HOST_PORT}"
+                echo "${env.STAGE}"
+				//echo "Website URL: http://${PUBLIC_IP}:${HOST_PORT}"
 			}
         }
 	}
