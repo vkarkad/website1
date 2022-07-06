@@ -23,8 +23,10 @@ pipeline {
         stage('Pre-Build') {
             steps {
                 sh "printenv"
+                script {
                 //ip_cmd = "curl ifconfig.co | tail -1"
       	        PUBLIC_IP = sh(script: "curl ifconfig.co | tail -1", returnStdout: true).trim()
+                }
       	        echo "PUBLIC_IP: <<${PUBLIC_IP}>>"
       	        echo "HOST_PORT: <<${HOST_PORT}>>"
       	        echo "CNTR_PORT: <<${CNTR_PORT}>>"
