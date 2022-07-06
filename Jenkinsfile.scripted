@@ -47,7 +47,7 @@ pipeline {
           echo "In stage: ${env.STAGE}"
           IMAGE_TAG = "${BUILD_USER}/${BUILD_JOB}"
           //dockerImage = docker.build "${IMAGE_TAG}"
-          sh "docker image ${IMAGE_TAG}"
+          sh "docker build --tag ${IMAGE_TAG} ."
         }
       }
     }
