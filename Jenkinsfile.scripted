@@ -96,8 +96,8 @@ pipeline {
        stage('Nginx-Deploy') {	
             steps {
                 echo "${env.STAGE}"
-      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f deploy.yml"
-      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f svc.yml"
+      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f deploy.yml"
+      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f svc.yml"
 	    }
         }
 
