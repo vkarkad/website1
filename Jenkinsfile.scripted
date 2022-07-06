@@ -43,34 +43,31 @@ pipeline {
 
     stage('Build-image') {
       steps {
-        return //FIXME
         script {
           echo "In stage: ${env.STAGE}"
           IMAGE_TAG = "${BUILD_USER}/${BUILD_JOB}"
           //dockerImage = docker.build "${IMAGE_TAG}"
-          sh "docker image ${IMAGE_TAG}"
+          //FIXME-sh "docker image ${IMAGE_TAG}"
         }
       }
     }
 
     stage('Push-Image') {
       steps {
-        return //FIXME
         script {
           echo "In stage: ${env.STAGE}"
-          withDockerRegistry(credentialsId: "${DOCKERHUB_CREDS}") {
-            sh "docker push ${IMAGE_TAG}"
-          } 
+          //FIXME-withDockerRegistry(credentialsId: "${DOCKERHUB_CREDS}") {
+            //FIXME-sh "docker push ${IMAGE_TAG}"
+          //FIXME-} 
         }
       }
     }
 
     stage('Nginx-Deploy') {	
-      return //FIXME
       steps {
         echo "In stage: ${env.STAGE}"
-        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f nginx_deployment.yml"
-        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f nodeport_service.yml"
+        //FIXME-sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f nginx_deployment.yml"
+        //FIXME-sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f nodeport_service.yml"
       }
     }
 
