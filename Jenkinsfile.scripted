@@ -39,6 +39,7 @@ pipeline {
 
         stage('GIT-Checkout') {
             steps {
+                echo "${env.STAGE}"
                 git branch: 'master', url: 'https://github.com/vkarkad/website1.git'
                 sh "pwd && ls -la"
             }
