@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent { 
-    node { label 'worker1' } 
-  }
+    agent { 
+        node { label 'worker1' } 
+    }
 
 	environment {
 		DOCKERHUB_CREDS =credentials('18307b93-3074-471e-a5e0-ce482bca9419') 
@@ -19,56 +19,56 @@ pipeline {
 	}
 
 	stages {
-    stage('Pre-Build') {
-      steps {
-        sh "printenv"
-        ip_cmd = "curl ifconfig.co | tail -1"
-      	PUBLIC_IP = sh (script: ip_cmd, returnStdout: true).trim()
-      	echo "PUBLIC_IP: <<${PUBLIC_IP}>>"
-      	echo "HOST_PORT: <<${HOST_PORT}>>"
-      	echo "CNTR_PORT: <<${CNTR_PORT}>>"
-      	echo "IMAGE_VER: <<${IMAGE_VER}>>"
-      	echo "WORKSPACE: <<${BUILD_DIR}>>"
-      	echo "BUILD_NUMBER: <<${BUILD_NUM}>>"
-      	echo "JOB_BASE_NAME: <<${BUILD_JOB}>>"
-      }
-    }
+        stage('Pre-Build') {
+            steps {
+                sh "printenv"
+                ip_cmd = "curl ifconfig.co | tail -1"
+      	        PUBLIC_IP = sh (script: ip_cmd, returnStdout: true).trim()
+      	        echo "PUBLIC_IP: <<${PUBLIC_IP}>>"
+      	        echo "HOST_PORT: <<${HOST_PORT}>>"
+      	        echo "CNTR_PORT: <<${CNTR_PORT}>>"
+      	        echo "IMAGE_VER: <<${IMAGE_VER}>>"
+      	        echo "WORKSPACE: <<${BUILD_DIR}>>"
+      	        echo "BUILD_NUMBER: <<${BUILD_NUM}>>"
+      	        echo "JOB_BASE_NAME: <<${BUILD_JOB}>>"
+            }
+        }
 
-    stage('GIT-Checkout') {
-      steps {
-        git branch: 'master', url: 'https://github.com/vkarkad/website1.git'
-        sh "pwd && ls -la"
-      }
-    }
+        stage('GIT-Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/vkarkad/website1.git'
+                sh "pwd && ls -la"
+            }
+        }
 
-    stage('Docker-Build') {
-      steps {
-        return // FIXME
+        stage('Docker-Build') {
+            steps {
+                return // FIXME
 
-    	  // Build the website image
-        sh "cd ${BUILD_DIR}/${BUILD_JOB};pwd;ls -l;cat -n Dockerfile"
-        IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
-        sh "sudo docker build --tag ${IMAGE_TAG} ."
-        sh "sudo docker run -dit --name ${IMAGE_TAG} -p ${HOST_PORT}:${CNTR_PORT} ${IMAGE_TAG}"
+    	        // Build the website image
+                sh "cd ${BUILD_DIR}/${BUILD_JOB};pwd;ls -l;cat -n Dockerfile"
+                IMAGE_TAG = "${BUILD_JOB}:${IMAGE_VER}"
+                sh "sudo docker build --tag ${IMAGE_TAG} ."
+                sh "sudo docker run -dit --name ${IMAGE_TAG} -p ${HOST_PORT}:${CNTR_PORT} ${IMAGE_TAG}"
 
-        // Publish the website image
-        sh "sudo echo ${GITHUB_PASSWD} | sudo docker login -u ${GITHUB_USERID} --password-stdin"
-    	}
-    }
+                // Publish the website image
+                sh "sudo echo ${GITHUB_PASSWD} | sudo docker login -u ${GITHUB_USERID} --password-stdin"
+    	    }
+        }
 
-	  stage('Nginx-Deploy') {	
-      steps {
-				return // FIXME
+	    stage('Nginx-Deploy') {	
+            steps {
+			    return // FIXME
 
-      	sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f deploy.yml"
-      	sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f svc.yml"
-		  }
-    }
+      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f deploy.yml"
+      	        sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl create -f svc.yml"
+		    }
+        }
 
-    stage('Publish-Website') {
-      steps {
+        stage('Publish-Website') {
+            steps {
 				echo "Website URL: http://${PUBLIC_IP}:${HOST_PORT}"
 			}
-    }
+        }
 	}
 }
