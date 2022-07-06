@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: veer2/app6
+        image: vkarkad/website
         ports:
         - containerPort: 80
