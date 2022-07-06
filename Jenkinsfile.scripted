@@ -6,7 +6,6 @@ pipeline {
   }
 
   environment {
-    DOCKERHUB_CREDS = credentials('18307b93-3074-471e-a5e0-ce482bca9419') 
     BUILD_JOB = "${env.JOB_BASE_NAME}"
     BUILD_NUM = "${env.BUILD_NUMBER}"
     BUILD_DIR = "/opt/jenkins/workspace/workspace"
@@ -56,7 +55,7 @@ pipeline {
       steps {
         script {
           echo "In stage: ${env.STAGE}"
-          withDockerRegistry(credentialsId: "${DOCKERHUB_CREDS}") {
+          withDockerRegistry(credentialsId: '18307b93-3074-471e-a5e0-ce482bca9419') { 
             sh "docker push ${IMAGE_TAG}"
           } 
         }
