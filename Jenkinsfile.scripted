@@ -43,9 +43,9 @@ pipeline {
 
     stage('Build-image') {
       steps {
+        return //FIXME
         script {
           echo "In stage: ${env.STAGE}"
-          return //FIXME
           IMAGE_TAG = "${BUILD_USER}/${BUILD_JOB}"
           //dockerImage = docker.build "${IMAGE_TAG}"
           sh "docker image ${IMAGE_TAG}"
@@ -55,9 +55,9 @@ pipeline {
 
     stage('Push-Image') {
       steps {
+        return //FIXME
         script {
           echo "In stage: ${env.STAGE}"
-          return //FIXME
           withDockerRegistry(credentialsId: "${DOCKERHUB_CREDS}") {
             sh "docker push ${IMAGE_TAG}"
           } 
@@ -66,9 +66,9 @@ pipeline {
     }
 
     stage('Nginx-Deploy') {	
+      return //FIXME
       steps {
         echo "In stage: ${env.STAGE}"
-        return //FIXME
         sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f nginx_deployment.yml"
         sh "cd ${BUILD_DIR}/${BUILD_JOB} && kubectl apply -f nodeport_service.yml"
       }
