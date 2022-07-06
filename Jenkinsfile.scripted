@@ -76,15 +76,15 @@ pipeline {
              }
           }
       }
-    stage('Deploy Image') {
+    stage('Push Image') {
       steps{
         script {
-                echo "${env.STAGE}"
-          docker.withRegistry( '', DOCKERHUB_CREDS) {
+          echo "${env.STAGE}"
+          withDockerRegistry(credentialsId: '18307b93-3074-471e-a5e0-ce482bca9419') {
             dockerImage.push("${IMAGE_TAG}")
-            //dockerImage.push('latest')
+          } 
+          //dockerImage.push('latest')
 
-          }
         }
       }
     }
