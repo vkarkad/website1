@@ -36,7 +36,7 @@ pipeline {
     stage('GIT-Checkout') {
       steps {
         echo "In stage: ${env.STAGE}"
-        git branch: 'master', url: 'https://github.com/${BUILD_USER}/website1.git'
+        git branch: 'master', url: "https://github.com/${BUILD_USER}/website1.git"
         sh "pwd && ls -la"
       }
     }
